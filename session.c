@@ -462,10 +462,10 @@ void datafeed_in(const struct sr_dev_inst *sdi,
 
 	if (!do_props && o && !opt_pds) {
 		if (sr_output_send(o, packet, &out) == SR_OK) {
-			if (oa && !out) {
+			if (oa && !out && packet->type == SR_DF_ANALOG) {
 				/*
-				 * The user didn't specify an output module,
-				 * but needs to see this analog data.
+				 * Show otherwise unhandled analog samples, but do not
+				 * append text metadata or frame markers to binary output.
 				 */
 				sr_output_send(oa, packet, &out);
 			}
